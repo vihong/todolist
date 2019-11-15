@@ -16,16 +16,16 @@ let LIST, id;
 let data = localStorage.getItem('TODO');
 
 //check if data is empty or not
-if(data){
+if (data) {
     LIST = JSON.parse(data);
     id = LIST.length;
     loadList(LIST); //load the list to the user interface
-}else{
+} else {
     LIST = [];
     id = 0;
 }
 
-function loadList (array) {
+function loadList(array) {
     array.forEach((item) => {
         addToDo(item.name, item.id, item.done, item.trash);
     });
@@ -39,8 +39,8 @@ dateElement.innerHTML = today.toLocaleDateString("en-UK", options);
 
 
 //--------------------------------      addToDo()    ------------------------------------------//
-function addToDo (toDo, id, done, trash) {
-    if(trash){return;};
+function addToDo(toDo, id, done, trash) {
+    if (trash) { return; };
 
     const DONE = done ? CHECK : UNCHECK;
     const LINE = done ? LINE_TROUGH : "";
@@ -60,17 +60,17 @@ function addToDo (toDo, id, done, trash) {
 
 
 // trigger addTodo() when pressing the Enter key
-document.addEventListener('keyup',(event) => {
-    if (event.keyCode == 13){
+document.addEventListener('keyup', (event) => {
+    if (event.keyCode == 13) {
         const toDo = inputElement.value;
 
         //if the input isn't empty
-        if(toDo){
+        if (toDo) {
             addToDo(toDo);
 
             LIST.push({
                 name: toDo,
-                id : id,
+                id: id,
                 done: false,
                 trash: false
             });
@@ -82,13 +82,34 @@ document.addEventListener('keyup',(event) => {
     }
 });
 
+document.getElementById('plusIcon').addEventListener('click', (event) => {
+    const toDo = inputElement.value;
+
+    //if the input isn't empty
+    if (toDo) {
+        addToDo(toDo);
+
+        LIST.push({
+            name: toDo,
+            id: id,
+            done: false,
+            trash: false
+        });
+        // add item to localStorage (this code must be added where LIST is updated)
+        localStorage.setItem('TODO', JSON.stringify(LIST));
+        id++;
+    }
+    inputElement.value = "";
+});
+
+
 //--------------------------------      completeToDo()    ------------------------------------------//
-function completeToDo (element) {
+function completeToDo(element) {
     element.classList.toggle(CHECK);
     element.classList.toggle(UNCHECK);
     element.parentNode.querySelector('.text').classList.toggle(LINE_TROUGH);
 
-    LIST[element.id].done  = LIST[element.id].done ? false : true;
+    LIST[element.id].done = LIST[element.id].done ? false : true;
     localStorage.setItem('TODO', JSON.stringify(LIST));
 
 }
@@ -98,7 +119,7 @@ function completeToDo (element) {
 
 
 //--------------------------------      removeToDo()    ------------------------------------------//
-function removeToDo (element) {
+function removeToDo(element) {
     element.parentNode.parentNode.removeChild(element.parentNode);
     LIST[element.id].trash = true;
     localStorage.setItem('TODO', JSON.stringify(LIST));
@@ -110,14 +131,14 @@ list.addEventListener('click', (event) => {
     const element = event.target;
     const elementJob = element.attributes.job.value;
 
-    if(elementJob == 'complete'){
+    if (elementJob == 'complete') {
         completeToDo(element);
     }
-    else if(elementJob == 'delete'){
+    else if (elementJob == 'delete') {
         removeToDo(element);
 
     }
-        // add item to localStorage (this code must be added where LIST is updated)
+    // add item to localStorage (this code must be added where LIST is updated)
     localStorage.setItem('TODO', JSON.stringify(LIST));
 });
 
@@ -129,7 +150,6 @@ list.addEventListener('click', (event) => {
 // clear localStorage
 clearElement.addEventListener('click', () => {
     localStorage.clear();
-    location.reload(); 
- });
- 
- 
+    location.reload();
+});
+
