@@ -53,8 +53,8 @@ body{
 
 .content{
     width:380px;
-    height: 350px;
-    max-height:350px;
+    /* height: 350px; */
+    min-height:315px;
     background-color: #FFF;
     overflow: auto;
 }
